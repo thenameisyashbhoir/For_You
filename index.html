@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>My Pretty Girl</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <script src="config.js"></script>
+</head>
+
+<body>
+  <main class="wrap">
+    <section class="card" style="padding:18px 16px 22px;">
+      <div class="title">
+        <span class="pink" id="partnerName">RUTU</span>, will you marry me? 💘
+      </div>
+
+      <div class="row">
+        <button class="btn btnPrimary" id="yesBtn" onclick="location.href='thankyou.html'">Yes 💖</button>
+        <button class="btn btnGhost" id="noButton">No 🙈</button>
+      </div>
+
+      <img src="cat.gif" alt="cute cat" class="imgHero" />
+    </section>
+  </main>
+
+  <script>
+    // Prevent iOS double-tap zoom feeling on rapid taps
+    let lastTouchEnd = 0;
+    document.addEventListener(
+      "touchend",
+      function (event) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) event.preventDefault();
+        lastTouchEnd = now;
+      },
+      { passive: false }
+    );
+
+    const cfg = window.VALENTINE_CONFIG || {};
+    const partner = cfg.partnerName || "RUTU";
+    document.getElementById("RUTU").textContent = partner;
+
+    const noButton = document.getElementById("noButton");
+    const yesBtn = document.getElementById("yesBtn");
+
+    noButton.addEventListener("click", () => {
+      const current = parseFloat(getComputedStyle(yesBtn).fontSize);
+      yesBtn.style.fontSize = current + 4 + "px";
+
+      const icons = ["💖", "💕", "✨", "🌸"];
+      for (let i = 0; i < 7; i++) {
+        const h = document.createElement("div");
+        h.className = "floatHeart";
+        h.textContent = icons[Math.floor(Math.random() * icons.length)];
+        h.style.left = Math.random() * 100 + "vw";
+        h.style.fontSize = 14 + Math.random() * 18 + "px";
+        h.style.animationDelay = Math.random() * 0.4 + "s";
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 3500);
+      }
+    });
+  </script>
+</body>
+
+</html>
