@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For You 💐</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <script src="config.js"></script>
+  <style>
+    body {
+      overflow-x: hidden;
+    }
+
+    .flowerField {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(18px 18px at 8% 86%, rgba(255, 95, 158, .22), transparent 60%),
+        radial-gradient(16px 16px at 16% 78%, rgba(255, 148, 148, .22), transparent 60%),
+        radial-gradient(22px 22px at 28% 92%, rgba(255, 95, 158, .18), transparent 60%),
+        radial-gradient(18px 18px at 40% 80%, rgba(255, 148, 148, .22), transparent 60%),
+        radial-gradient(20px 20px at 55% 90%, rgba(255, 95, 158, .18), transparent 60%),
+        radial-gradient(16px 16px at 70% 82%, rgba(255, 148, 148, .22), transparent 60%),
+        radial-gradient(22px 22px at 84% 92%, rgba(255, 95, 158, .18), transparent 60%),
+        radial-gradient(18px 18px at 92% 78%, rgba(255, 148, 148, .22), transparent 60%),
+        radial-gradient(1200px 600px at 50% 0%, #ffe3e1, #fff5e4);
+      animation: drift 10s ease-in-out infinite alternate;
+    }
+
+    @keyframes drift {
+      from {
+        filter: saturate(1.05);
+        transform: translateY(0);
+      }
+
+      to {
+        filter: saturate(1.18);
+        transform: translateY(-10px);
+      }
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .recap {
+      padding: 16px 14px;
+      margin-top: 12px;
+      text-align: left;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .72);
+      border: 1px solid rgba(255, 95, 158, .20);
+    }
+
+    .recap h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      font-weight: 1000;
+    }
+
+    .line {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255, 95, 158, .10);
+    }
+
+    .line:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      width: 108px;
+      font-size: 12px;
+      color: rgba(47, 34, 34, .55);
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      flex: 0 0 auto;
+    }
+
+    .val {
+      font-size: 15px;
+      font-weight: 900;
+      color: rgba(47, 34, 34, .88);
+    }
+
+    .loveNote {
+      margin-top: 12px;
+      font-size: 14px;
+      color: rgba(47, 34, 34, .70);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="flowerField"></div>
+
+  <main class="wrap content">
+    <section class="card" style="padding:18px 16px 22px;">
+      <div class="title">For you, always 💐</div>
+      <p class="subtitle">Even miles apart, you’re still my favorite person. 🤍</p>
+
+      <section class="recap">
+        <h2>Our plan ✨</h2>
+        <div class="line">
+          <div class="label">Online date</div>
+          <div class="val" id="r1">—</div>
+        </div>
+        <div class="line">
+          <div class="label">Day</div>
+          <div class="val" id="r2">—</div>
+        </div>
+        <div class="line">
+          <div class="label">Food</div>
+          <div class="val" id="r3">—</div>
+        </div>
+        <div class="line">
+          <div class="label">Dessert</div>
+          <div class="val" id="r4">—</div>
+        </div>
+      </section>
+
+      <div style="margin-top:16px;">
+        <button class="btn btnPrimary btnFull" id="shareBtn">Copy our plan 💌 (send it to me)</button>
+      </div>
+
+      <div style="margin-top:10px;">
+        <button class="btn btnGhost btnFull" id="finalBtn" onclick="location.href='index.html'">Thank you for being my
+          Partner 💗</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const cfg = window.VALENTINE_CONFIG || {};
+
+    const online = localStorage.getItem('online_choice') || '—';
+    const when = localStorage.getItem('online_when') || 'Any day';
+    const food = localStorage.getItem('food_choice') || '—';
+    const dessert = localStorage.getItem('dessert_choice') || localStorage.getItem('dessertChoice') || '—';
+
+    document.getElementById('r1').textContent = online;
+    document.getElementById('r2').textContent = when;
+    document.getElementById('r3').textContent = food;
+    document.getElementById('r4').textContent = dessert;
+
+    const shareBtn = document.getElementById('shareBtn');
+    const finalBtn = document.getElementById('finalBtn');
+
+    shareBtn.textContent = cfg.shareButtonText || shareBtn.textContent;
+    finalBtn.textContent = cfg.finalButtonText || finalBtn.textContent;
+
+    shareBtn.addEventListener('click', async () => {
+      const msg =
+        `Valentine plan 💖
+Online date: ${online}
+Day: ${when}
+Food: ${food}
+Dessert: ${dessert}
+
+${cfg.shareMessageFooter || ''}`.trim();
+
+      try {
+        await navigator.clipboard.writeText(msg);
+        shareBtn.textContent = cfg.shareCopiedText || 'Copied ✅';
+        setTimeout(() => (shareBtn.textContent = cfg.shareButtonText || 'Copy our plan 💌'), 2200);
+      } catch {
+        prompt('Copy this and send it:', msg);
+      }
+    });
+
+    // Extra flowers
+    const icons = ['🌸', '🌷', '💐', '🌺', '✨', '💖', '🪻', '🌼'];
+    for (let i = 0; i < 30; i++) {
+      const h = document.createElement('div');
+      h.className = 'floatHeart';
+      h.textContent = icons[Math.floor(Math.random() * icons.length)];
+      h.style.left = (Math.random() * 100) + 'vw';
+      h.style.fontSize = (14 + Math.random() * 22) + 'px';
+      h.style.animationDelay = (Math.random() * 1.6) + 's';
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 5000);
+    }
+  </script>
+</body>
+
+</html>
